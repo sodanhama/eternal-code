@@ -1,9 +1,13 @@
 {
   "name": "eternalcode",
   "version": "1.0.0",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev:cli": "bun run --watch packages/cli/src/index.tsx"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }
-

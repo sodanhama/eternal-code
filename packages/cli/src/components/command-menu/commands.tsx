@@ -4,47 +4,74 @@ export const COMMANDS: Command[] = [
     {
         name: "new",
         description: "Create a new conversation",
-        value: "/new"
+        value: "/new",
+        action: (ctx) => {
+            ctx.toast.show({message: "Starting a new conversation..."});
+        }
     },
     {
         name: "agents",
         description: "Switch agents",
-        value: "/agents"    
+        value: "/agents",
+        action: (ctx) => {
+            ctx.toast.show({message: "Switching agents..."});
+        }
     },
     {
         name: "models",
         description: "Switch models",
-        value: "/models"
+        value: "/models",
+        action: (ctx) => {
+            ctx.toast.show({message: "Switching models..."});
+        }
     },
     {
         name: "sessions",
         description: "Browse past sessions",
-        value: "/sessions"
+        value: "/sessions",
+        action: (ctx) => {
+            ctx.toast.show({message: "Loading sessions..."});
+        }
     },
     {
         name: "theme",
         description: "Change color theme",
-        value: "/theme"
+        value: "/theme",
+        action: (ctx) => {
+            ctx.toast.show({message: "Opening theme picker..."});
+        }
     },
     {
         name: "login",
         description: "Login to your account",
-        value: "/login"
+        value: "/login",
+        action: (ctx) => {
+            ctx.toast.show({message: "Opening browser to authenticate..."});
+        }
     },
     {
         name: "logout",
         description: "Logout of your account",
-        value: "/logout"
+        value: "/logout",
+        action: (ctx) => {
+            ctx.toast.show({message: "Logged out", variant:"success"});
+        }
     },
     {
         name: "upgrade",
         description: "Buy more credits",
-        value: "/upgrade"
+        value: "/upgrade",
+        action: (ctx) => {
+            ctx.toast.show({message: "Opening browser to upgrade..."});
+        }
     },
     {
         name: "usage",
         description: "View your usage and remaining credits",
-        value: "/usage"
+        value: "/usage",
+        action: (ctx) => {
+            ctx.toast.show({message: "Fetching usage data..."});
+        }
     },
     {
         name: "exit",
