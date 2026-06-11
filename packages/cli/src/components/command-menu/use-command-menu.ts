@@ -11,7 +11,7 @@ type UseCommandMenuProps = {
     selectedIndex: number;
     scrollRef: RefObject<ScrollBoxRenderable | null>;
     handleContentChange: (text: string) => void;
-    resolveCommand: (index: number) => void;
+    resolveCommand: (index: number) => Command | undefined;
     setSelectedIndex: (index: number) => void;
 }
 
