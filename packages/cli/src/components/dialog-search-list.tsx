@@ -30,7 +30,6 @@ export function DialogSearchList<T>({
         const inputRef = useRef<InputRenderable>(null);
         const scrollRef = useRef<ScrollBoxRenderable>(null);
         const { isTopLayer } = useKeyboardLayer();
-        // const {colors} = useTheme();
         
         const handleContentChange = useCallback(() => {
             const text = inputRef.current?.value ?? "";

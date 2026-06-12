@@ -39,14 +39,6 @@ export const COMMANDS: Command[] = [
         }
     },
     {
-        name: "theme",
-        description: "Change color theme",
-        value: "/theme",
-        action: (ctx) => {
-            ctx.toast.show({message: "Opening theme picker..."});
-        }
-    },
-    {
         name: "login",
         description: "Login to your account",
         value: "/login",
