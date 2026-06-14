@@ -1,37 +1,23 @@
 import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
-import { Header } from "./components/header";
-import { InputBar } from "./components/input-bar";
-import { ToastProvider } from "./providers/toast";
-import { KeyboardLayerProvider } from "./providers/keyboard-layer";
-import { DialogProvider } from "./providers/dialog";
+import { createMemoryRouter, RouterProvider } from "react-router";
+import { RootLayout } from "./layouts/root-layout";
 
+const router = createMemoryRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {index: true, element: <box><text>Home</text></box>},
+      {path: "sessions/new", element: <box><text>sessions/new</text></box>},
+      {path: "sessions/:id", element: <box><text>sessions/:id</text></box>},
+
+    ]
+  }
+])
 
 function App() {
-  return (
-    <KeyboardLayerProvider>
-    <DialogProvider>
-    <ToastProvider>
-    <box
-      alignItems="center"
-      justifyContent="center"
-      backgroundColor="#171A21"
-      width="100%"
-      height="100%"
-      gap={2}
-    >
-      <Header />
-      <box
-      width="100%"
-      maxWidth={80}
-      paddingX={2}>
-        <InputBar onSubmit={()=>{}}/>
-      </box>
-    </box>
-    </ToastProvider>
-    </DialogProvider>
-    </KeyboardLayerProvider>
-  )
+  return <RouterProvider router={router} />;
 };
 
 const renderer = await createCliRenderer(
