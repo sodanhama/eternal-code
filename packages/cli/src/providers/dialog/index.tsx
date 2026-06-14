@@ -91,7 +91,7 @@ function Dialog({ currentDialog, close }: DialogProps) {
             <box
                 width={Math.min(60, dimensions.width - 4)}
                 height="auto"
-                backgroundColor="1b263b"
+                backgroundColor="#1b263b"
                 paddingX={4}
                 paddingY={1}
                 flexDirection="column"
