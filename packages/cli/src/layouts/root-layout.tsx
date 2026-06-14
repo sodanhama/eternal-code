@@ -1,19 +1,19 @@
 import { Outlet } from "react-router";
 import { ToastProvider } from "../providers/toast";
-import { KeyboardLayerProvider } from "../providers/keyboard-layer";
 import { DialogProvider } from "../providers/dialog";
+import { KeyboardLayerProvider } from "../providers/keyboard-layer";
 import { Root } from "./root";
 
 export function RootLayout() {
-    return(
-        <ToastProvider>
+  return (
+    <ToastProvider>
+      <KeyboardLayerProvider>
         <DialogProvider>
-        <KeyboardLayerProvider>
-            <Root>
-                <Outlet />
-            </Root>
-        </KeyboardLayerProvider>
+          <Root>
+            <Outlet />
+          </Root>
         </DialogProvider>
-        </ToastProvider>
-    )
+      </KeyboardLayerProvider>
+    </ToastProvider>
+  );
 }
