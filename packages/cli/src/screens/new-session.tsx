@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { ErrorMessage } from '../components/messages';
+import { ErrorMessage, UserMessage, BotMessage } from '../components/messages';
+import { SessionShell } from '../components/sessions-shell';
 
 export function NewSession() {
     const navigate = useNavigate();
@@ -17,10 +18,10 @@ export function NewSession() {
     if (!state?.message) return null;
 
     return (
-        <box flexGrow={1} flexDirection="column" padding={2} gap={1}>
-            <text>Creating session...</text>
-            <text>{state.message}</text>
-            <ErrorMessage message="Oops!"/>
-        </box>
+        <SessionShell onSubmit={()=>{}} inputDisabled loading>
+            <UserMessage message={state.message} />
+            <BotMessage content="This is a sample response." model="opus-4-6"/>
+            <ErrorMessage message="This is a sample error message." />
+        </SessionShell>
     )
 }

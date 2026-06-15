@@ -1,26 +1,23 @@
-import { TextAttributes } from '@opentui/core';
-
 type Props = {
-    message: string;
+    content: string;
+    model: string;
 }
 
-export function ErrorMessage({ message }: Props) {
+export function BotMessage({ content, model }: Props) {
     return (
         <box width="100%" alignItems="center">
-            <box 
-                border={["left"]}
-                borderColor="red"
-                width="100%"
-            >
-                <box
-                    justifyContent="center"
-                    paddingX={2}
-                    paddingY={1}
-                    backgroundColor="#1b263b"
-                    width="100%"
-                >
-                    <text attributes={TextAttributes.DIM}>
-                        {message}
+            <box paddingY={1} width="100%">
+                <box paddingX={3} width="100%">
+                    <text>
+                        {content}
+                    </text>
+                </box>
+            </box>
+            <box paddingX={3} paddingBottom={1} gap={1} width="100%">
+                <box flexDirection="row" width="100%">
+                    <text fg="lightgray">◉</text>
+                    <text>
+                        {model}
                     </text>
                 </box>
             </box>
