@@ -5,6 +5,7 @@
     "": {
       "name": "my-project",
       "devDependencies": {
+        "@types/bun": "latest",
         "typescript": "^5.9.3",
       },
     },

@@ -1,7 +1,9 @@
+// packages/cli/tsconfig.json
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@opentui/react"
+    "jsxImportSource": "@opentui/react",
+    "types": ["bun"]
   }
 }

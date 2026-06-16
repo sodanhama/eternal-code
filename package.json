@@ -8,6 +8,7 @@
     "dev:cli": "bun run --watch packages/cli/src/index.tsx"
   },
   "devDependencies": {
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "@types/bun": "latest"
   }
 }
