@@ -28,12 +28,23 @@ app.get("/debug-sentry", () => {
 
 app.onError((error,c)=>{
     if (error instanceof HTTPException){
+        Sentry.logger.warn("Handled HTTP error", {
+            status: error.status,
+            message: error.message || "Request failed",
+            path: c.req.path,
+            method: c.req.method,
+        })
+
         return c.json({
             error: error.message || "Request failed"},
         error.status)
     }
 
-    console.error("Unhandled server error", error);
+    Sentry.logger.error("Unhandled error", {
+        path: c.req.path,
+        method: c.req.method,
+        message: error instanceof Error ? error.message : "Unknown error",
+    });
 
     return c.json({
         error: "Internal Server Error"
