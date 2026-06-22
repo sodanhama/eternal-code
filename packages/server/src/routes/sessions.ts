@@ -73,8 +73,7 @@ const app = new Hono()
 
         Sentry.logger.info("Loaded session", {
             sessionId: session.id,
-            messageCount: session.messages.length,
-        })
+            })
 
         return c.json(session);
     })
