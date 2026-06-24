@@ -37,11 +37,12 @@ type ActiveStream = {
     model: SupportedChatModelId;
     parts: ClientMessagePart[];
 }
+
 type SubmitParams = {
-    mode: Mode;
-    model: SupportedChatModelId;
-    request: (controller: AbortController) => Promise<ClientResponse<unknown>>
-}
+  userText: string;
+  mode: Mode;
+  model: SupportedChatModelId;
+};
 
 type RunStreamParams = {
   mode: Mode;
@@ -54,7 +55,7 @@ export function useChat(
     initialMessages: Message[],
 ) {
     const [messages, setMessages] = useState<Message[]>(initialMessages);
-    const [streamingState, setStreamingState] = useState<StreamingState>({ status: "idle" });
+    const [streaming, setStreaming] = useState<StreamingState>({ status: "idle" });
     const activeStreamRef = useRef<ActiveStream | null>(null);
 
     const updateMessages = useCallback((updater: (prev: Message[]) => Message[])=> {
@@ -78,7 +79,7 @@ export function useChat(
 
         activeStream.parts = snapshot;
 
-        setStreamingState({
+        setStreaming({
             status: "streaming",
             parts: snapshot,
             mode: activeStream.mode,
@@ -90,7 +91,7 @@ export function useChat(
         if (!isActiveRequest(requestId)) return;
 
         activeStreamRef.current = null;
-        setStreamingState({ status: "idle" });
+        setStreaming({ status: "idle" });
     }, [isActiveRequest])
     
     const handleStream = useCallback(async (
@@ -198,7 +199,7 @@ export function useChat(
             parts: [],
         }
         activeStreamRef.current = activeStream;
-        setStreamingState({
+        setStreaming({
             status: "streaming",
             parts: [],
             mode,
@@ -227,7 +228,7 @@ export function useChat(
     }, [clearStream, handleStream, isActiveRequest, updateMessages])
 
     const resume = useCallback(async (
-        {mode, model}: Omit<SubmitParams, "user-text">
+        {mode, model}: Omit<SubmitParams, "userText">
     ) => {
         await runStream({
             mode, model,
@@ -248,6 +249,41 @@ export function useChat(
         if (!last || last.role !== "user") return;
 
         hasAutoResumedRef.current = true;
-        void resume({mode: last.mode, model: last.model});
+        void resume ({ mode: last.mode, model: last.model })
     }, [initialMessages, resume])
+
+    const submit = useCallback(async (
+        {userText, mode, model}: SubmitParams
+    ) => {
+        const userMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "user",
+        content: userText,
+        mode,
+        model}
+        updateMessages((prev) => [...prev, userMessage]);
+
+        await runStream({
+            mode,
+            model,
+            request: async(controller) => {
+                return apiClient.chat[":sessionId"].$post(
+                    { param: {sessionId}, json: {content:userText, mode,model}},
+                    {init: {signal: controller.signal}},
+                )
+            }
+        })
+    }, [runStream, sessionId, updateMessages])
+
+    const abort = useCallback(()=> {
+        const activeStream = activeStreamRef.current;
+        if (!activeStream) return;
+
+        activeStreamRef.current = null;
+        setStreaming({status: "idle"})
+        activeStream.controller.abort();
+    }, [])
+
+    return { messages, streaming, submit, abort}
 }
+

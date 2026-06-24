@@ -2,6 +2,10 @@ import { SessionShell } from "../components/sessions-shell";
 import { useParams, useLocation, useNavigate } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
+import prettyMs from "pretty-ms";
+import {DEFAULT_CHAT_MODEL_ID, type SupportedChatModelId} from "@eternalcode/shared"
+import { useChat} from "../hooks/use-chat";
+import type { Message, ClientMessagePart} from "../hooks/use-chat"
 import type { InferResponseType } from "hono/client";
 import { UserMessage, BotMessage, ErrorMessage } from "../components/messages";
 import { useToast } from "../providers/toast";
@@ -13,6 +17,33 @@ type SessionData = InferResponseType<(typeof apiClient.sessions)[":id"]["$get"],
 const sessionLocationSchema = z.object({
     session: z.custom<SessionData>((val)=> val != null && typeof val === "object" && "id" in val)
 })
+
+function mapDbMessages(dbMessages: SessionData["messages"]): Message[] {
+    return dbMessages.map((m): Message => {
+        if(m.role === "ERROR") {
+            return {id:m.id, role:"error", content:m.content}
+        }
+
+        if (m.role === "USER") {
+            return {
+                id: m.id,
+                role: "user",
+                content: m.content,
+                mode: m.mode,
+                model: m.model as SupportedChatModelId,
+            }
+        }
+
+        return {
+            id: m.id,
+            role: "assistant",
+            content: m.content,
+            model: m.model as SupportedChatModelId,
+            mode: m.mode,
+            parts: [{type: "text", text: m.content}]
+        }
+    })
+}
 
 function ChatMessage (
     {msg}: {
