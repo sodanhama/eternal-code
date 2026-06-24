@@ -20,6 +20,7 @@ export type Message =
     id: string;
     role: "assistant";
     content: string;
+    mode: Mode;
     model: SupportedChatModelId;
     parts: ClientMessagePart[];
     duration?: string;
