@@ -20,7 +20,7 @@ export function resolveChatModel(modelId: string): ResolvedModel {
     throw new Error(`Unsupported model ID: ${modelId}`);
   }
   return {
-    model: hackclub(found.id),
+    model: hackclub.chat(found.id),
     modelId: found.id,
   };
 }
