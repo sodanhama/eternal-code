@@ -3,7 +3,7 @@ export type ModelPricing = {
     outputUsdPerMillionTokens: number;
 }
 
-export type SupportedProvider = "anthropic" | "openai";
+export type SupportedProvider = "hackclub";
 
 type SupportedChatModelDefinition = {
     id: string;
@@ -11,64 +11,73 @@ type SupportedChatModelDefinition = {
     pricing: ModelPricing;
 }
 
-export const SUPPORTED_CHAT_MODELS =  [
+// Models allowed by Hack Club's AI proxy (https://ai.hackclub.com/proxy/v1).
+// Source: https://github.com/hackclub/ai (ALLOWED_LANGUAGE_MODELS env var)
+// Pricing is 0 since these are free to you via Hack Club's proxy.
+// Re-check this list periodically — Hack Club can add/remove models without notice.
+export const SUPPORTED_CHAT_MODELS = [
     {
-        id: "claude-sonnet-4-6",
-        provider: "anthropic",
-        pricing: {
-            inputUsdPerMillionTokens: 3,
-            outputUsdPerMillionTokens: 15,
-        }
+        id: "qwen/qwen3-32b",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
     },
     {
-        id: "claude-haiku-4-5",
-        provider: "anthropic",
-        pricing: {
-            inputUsdPerMillionTokens: 1,
-            outputUsdPerMillionTokens: 5,
-        }
+        id: "moonshotai/kimi-k2-thinking",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
     },
     {
-        id: "claude-opus-4-6",
-        provider: "anthropic",
-        pricing: {
-            inputUsdPerMillionTokens: 5,
-            outputUsdPerMillionTokens: 25,
-        }
+        id: "openai/gpt-oss-120b",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
     },
     {
-        id: "gpt-5.4",
-        provider: "openai",
-        pricing: {
-            inputUsdPerMillionTokens: 2.5,
-            outputUsdPerMillionTokens: 15,
-        }
+        id: "moonshotai/kimi-k2-0905",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
     },
     {
-        id: "gpt-5.4-mini",
-        provider: "openai",
-        pricing: {
-            inputUsdPerMillionTokens: 0.75,
-            outputUsdPerMillionTokens: 4.5,
-        }
+        id: "qwen/qwen3-vl-235b-a22b-instruct",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
     },
     {
-        id: "gpt-5,4-nano",
-        provider: "openai",
-        pricing: {
-            inputUsdPerMillionTokens: 0.2,
-            outputUsdPerMillionTokens: 1.25,
-        }
-    }
+        id: "nvidia/nemotron-nano-12b-v2-vl",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
+    },
+    {
+        id: "google/gemini-2.5-flash",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
+    },
+    {
+        id: "openai/gpt-5-mini",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
+    },
+    {
+        id: "deepseek/deepseek-v3.2-exp",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
+    },
+    {
+        id: "deepseek/deepseek-r1-0528",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
+    },
+    {
+        id: "z-ai/glm-4.6",
+        provider: "hackclub",
+        pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
+    },
 ] as const satisfies readonly SupportedChatModelDefinition[];
 
 export type SupportedChatModel = (typeof SUPPORTED_CHAT_MODELS)[number];
-
 export type SupportedChatModelId = SupportedChatModel["id"];
 
 export function findSupportedChatModel(modelId: string) {
     return SUPPORTED_CHAT_MODELS.find((model) => model.id === modelId);
 }
 
-export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "gpt-5.4";
-
+export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "qwen/qwen3-32b";

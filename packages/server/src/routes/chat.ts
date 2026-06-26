@@ -8,6 +8,26 @@ import { Mode, MessageStatus } from "@eternalcode/database/enums"
 import { type ChatStreamEvent } from "@eternalcode/shared"
 import { isSupportedChatModel, resolveChatModel } from "../lib/models"
 
+function extractErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === "string") return err;
+    if (err && typeof err === "object") {
+        const anyErr = err as Record<string, unknown>;
+        if (typeof anyErr.message === "string") return anyErr.message;
+        if (typeof anyErr.error === "string") return anyErr.error;
+        if (anyErr.error && typeof anyErr.error === "object") {
+            const nested = anyErr.error as Record<string, unknown>;
+            if (typeof nested.message === "string") return nested.message;
+        }
+        try {
+            return JSON.stringify(err);
+        } catch {
+            return "Unknown error";
+        }
+    }
+    return String(err);
+}
+
 const submitSchema = z.object({
     content: z.string(),
     mode: z.enum(Mode),
@@ -101,8 +121,7 @@ async function streamAIResponse(
     } catch (err) {
         if (abortController.signal.aborted){ return }
 
-        const message = err instanceof Error ? err.message : String(err);
-
+            const message = extractErrorMessage(err);
         await db.message.create({
             data: {
                 sessionId,
@@ -160,8 +179,7 @@ const app = new Hono()
                 })
             },
             async (err, stream) => {
-                const message = err instanceof Error ? err.message : String(err);
-                const errorEvent: ChatStreamEvent = { type: "error", message}
+const message = extractErrorMessage(err);                const errorEvent: ChatStreamEvent = { type: "error", message}
                 await stream.writeSSE({event: "error", data: JSON.stringify(errorEvent)})
             }
         )
@@ -211,8 +229,7 @@ const app = new Hono()
             })
         },
         async (err, stream) => {
-            const message = err instanceof Error ? err.message : String(err);
-            const errorEvent: ChatStreamEvent = { type: "error", message}
+const message = extractErrorMessage(err);            const errorEvent: ChatStreamEvent = { type: "error", message}
             await stream.writeSSE({event: "error", data: JSON.stringify(errorEvent)})
         } 
     )
