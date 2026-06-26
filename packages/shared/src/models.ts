@@ -27,7 +27,7 @@ export const SUPPORTED_CHAT_MODELS = [
         pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
     },
     {
-        id: "openai/gpt-oss-120b",
+        id: "x-ai/grok-build-0.1",
         provider: "hackclub",
         pricing: { inputUsdPerMillionTokens: 0, outputUsdPerMillionTokens: 0 }
     },
@@ -80,4 +80,4 @@ export function findSupportedChatModel(modelId: string) {
     return SUPPORTED_CHAT_MODELS.find((model) => model.id === modelId);
 }
 
-export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "qwen/qwen3-32b";
+export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "x-ai/grok-build-0.1";
