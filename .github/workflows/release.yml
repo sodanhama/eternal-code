@@ -43,6 +43,8 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
+        env:
+          DATABASE_URL: "postgresql://user:pass@localhost:5432/db"
         run: bun install --frozen-lockfile
 
       - name: Generate Prisma client
