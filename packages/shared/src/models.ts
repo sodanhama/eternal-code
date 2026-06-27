@@ -11,10 +11,6 @@ type SupportedChatModelDefinition = {
     pricing: ModelPricing;
 }
 
-// Models allowed by Hack Club's AI proxy (https://ai.hackclub.com/proxy/v1).
-// Source: https://github.com/hackclub/ai (ALLOWED_LANGUAGE_MODELS env var)
-// Pricing is 0 since these are free to you via Hack Club's proxy.
-// Re-check this list periodically — Hack Club can add/remove models without notice.
 export const SUPPORTED_CHAT_MODELS = [
     {
         id: "qwen/qwen3-32b",
@@ -80,4 +76,4 @@ export function findSupportedChatModel(modelId: string) {
     return SUPPORTED_CHAT_MODELS.find((model) => model.id === modelId);
 }
 
-export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "x-ai/grok-build-0.1";
+export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "qwen/qwen3-32b";

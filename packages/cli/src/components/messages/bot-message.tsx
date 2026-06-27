@@ -8,9 +8,10 @@ type Props = {
     mode: Mode;
     duration?: string;
     streaming?: boolean;
+    interrupted?: boolean;
 }
 
-export function BotMessage({ parts, model, mode, duration, streaming = false}: Props) {
+export function BotMessage({ parts, model, mode, duration, streaming = false, interrupted = false }: Props) {
     const text = parts
     .filter((p) => p.type === "text")
     .map((p) => p.text)
@@ -27,14 +28,23 @@ export function BotMessage({ parts, model, mode, duration, streaming = false}: P
             </box>
             <box paddingX={3} paddingBottom={1} gap={1} width="100%">
                 <box flexDirection="row" width="100%">
-                    <text fg={mode===Mode.PLAN ? "purple" : "gray"}>◉</text>
+                    <text
+                        attributes={interrupted ? TextAttributes.DIM : 0}
+                        fg={interrupted ? undefined : mode === Mode.PLAN ? "#F5A623" : "#7ED321"}
+                    >
+                        ◉
+                    </text>
                     <box flexDirection="row" gap={1}>
-                        <text>{mode===Mode.PLAN ? "Plan" : "Build"}</text>
-                        <text attributes={TextAttributes.DIM} fg="#292626">`&gt;`</text>
-                        <text attributes={TextAttributes.DIM}>`{model}`</text>
-                        {duration && (
+                        <text
+                            attributes={interrupted ? TextAttributes.DIM : 0}
+                        >
+                            {mode === Mode.PLAN ? "plan" : "execute"}
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg="#292626"> › </text>
+                        <text attributes={TextAttributes.DIM}>{model}</text>
+                        {(duration || interrupted) && (
                             <>
-                            <text attributes={TextAttributes.DIM} fg="#292626">`&gt;`</text>
+                            <text attributes={TextAttributes.DIM} fg="#292626"> › </text>
                             <text attributes={TextAttributes.DIM}>{duration}</text>
                             </>
                         )}

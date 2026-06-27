@@ -2,6 +2,7 @@ import { SessionShell } from "../components/sessions-shell";
 import { useParams, useLocation, useNavigate } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
+import {useKeyboard} from "@opentui/react"
 import prettyMs from "pretty-ms";
 import {DEFAULT_CHAT_MODEL_ID, type SupportedChatModelId} from "@eternalcode/shared"
 import { useChat} from "../hooks/use-chat";
@@ -11,6 +12,8 @@ import { UserMessage, BotMessage, ErrorMessage } from "../components/messages";
 import { useToast } from "../providers/toast";
 import {apiClient} from "../lib/api-client";
 import { getErrorMessage } from "../lib/http-errors";
+import { MessageStatus} from "@eternalcode/database/enums"
+import {useKeyboardLayer} from "../providers/keyboard-layer";
 
 type SessionData = InferResponseType<(typeof apiClient.sessions)[":id"]["$get"], 200>;
 
@@ -42,6 +45,7 @@ function mapDbMessages(dbMessages: SessionData["messages"]): Message[] {
             model: m.model as SupportedChatModelId,
             parts: [{type: "text", text: m.content}],
             ...(m.duration != null ? {duration: prettyMs(m.duration*1000)} : {}),
+            interrupted: m.status === MessageStatus.INTERRUPTED,
         }
     })
 }
@@ -64,21 +68,32 @@ function ChatMessage (
     model={msg.model}
     mode={msg.mode}
     duration={msg.duration}
+    interrupted={msg.interrupted}
     />
 }
 
 function SessionChat({session}: {session: SessionData}) {
     const [initialMessages] = useState(()=> mapDbMessages(session.messages));
-    const {messages, streaming, submit, abort} = useChat(session.id, initialMessages);
+    const { isTopLayer } = useKeyboardLayer();
+    const {messages, streaming, submit, abort, interrupt} = useChat(session.id, initialMessages);
 
     useEffect(()=>{
         return() => abort();
     }, [abort])
 
+    useKeyboard((key) => {
+        if (key.name === "escape" && isTopLayer("base") && streaming.status === "streaming")
+            {
+                key.preventDefault();
+                interrupt();
+            }
+})
+
     return (
         <SessionShell
             onSubmit={(text)=> submit({userText: text, mode:"BUILD", model: DEFAULT_CHAT_MODEL_ID})}
             loading={streaming.status==="streaming"}
+            interruptible={streaming.status==="streaming"}
         >
             {messages.map((msg)=>(
                 <ChatMessage key={msg.id} msg={msg} />

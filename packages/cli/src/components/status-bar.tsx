@@ -7,7 +7,7 @@ export function StatusBar() {
             <text attributes={TextAttributes.DIM} fg="#5e548e">
                 ›
             </text>
-            <text>opus-4-6</text>
+            <text>qwen/qwen3-32b</text>
         </box>  
     )
 }  
