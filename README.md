@@ -13,7 +13,7 @@ I took the help of youtube tutorials and AI - only to point out errors and learn
 Download here: https://github.com/sodanhama/eternal-code/releases/tag/v1.0.1
 
 | Platform | Arch | File | Tested personally |
-| --- | --- | --- | --- | --- |
+| --- | --- | --- | --- |
 | macOS | Apple Silicon (arm64) | `eternalcode-macos-arm64.zip` | ✅ |
 | Linux | x64 | `eternalcode-linux-x64.zip` | ❌ |
 | Windows | x64 | `eternalcode-windows-x64.zip` | ❌ |
