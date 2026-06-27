@@ -52,21 +52,27 @@ jobs:
 
       - name: Compile binary (unix)
         if: runner.os != 'Windows'
+        env:
+          PRODUCTION_API_URL: "https://eternalcodeserver-production.up.railway.app"
         run: |
           mkdir -p dist
           bun build packages/cli/src/index.tsx \
             --compile \
             --target=${{ matrix.target }} \
+            --define "API_URL=\"$PRODUCTION_API_URL\"" \
             --outfile dist/eternalcode${{ matrix.ext }}
 
       - name: Compile binary (windows)
         if: runner.os == 'Windows'
         shell: pwsh
+        env:
+          PRODUCTION_API_URL: "https://eternalcodeserver-production.up.railway.app"
         run: |
           New-Item -ItemType Directory -Force -Path dist
           bun build packages/cli/src/index.tsx `
             --compile `
             --target=${{ matrix.target }} `
+            --define "API_URL=`"$env:PRODUCTION_API_URL`"" `
             --outfile dist/eternalcode${{ matrix.ext }}
 
       - name: Package archive (unix)
