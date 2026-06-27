@@ -22,8 +22,9 @@ Download here: https://github.com/sodanhama/eternal-code/releases/tag/v1.0.1
  
 ```bash
 # macOS / Linux
-unzip eternalcode-<platform>.zip
-chmod +x eternalcode
+unzip eternalcode-<platform>.zip --- i did not need for macOS as finder does this automatically
+xattr -cr eternalcode
+chmod +x eternalcode --- i did not need for macOS 
 ./eternalcode
  
 # Windows
