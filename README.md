@@ -8,6 +8,8 @@ I took the help of youtube tutorials and AI - only to point out errors and learn
 
 ![Screenshot](https://cdn.hackclub.com/019f0718-cb0a-77d1-a74e-b90f9afd32de/Screenshot%202026-06-27%20at%208.51.23â%C2%80¯AM.png)
 
+Video demo: https://cdn.hackclub.com/019f0ded-9589-7e1f-911d-f9fd8cca8156/screen_recording_2026-06-28_at_4.40.03___pm.mp4
+
 ## Download
 
 Download here: https://github.com/sodanhama/eternal-code/releases/tag/v1.0.1
